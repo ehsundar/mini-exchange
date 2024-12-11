@@ -1,0 +1,7 @@
+Django==5.1.4
+psycopg[pool]==3.2.3
+
+pylint==3.3.2
+black==24.10.0
+isort==5.13.2
+pre-commit==4.0.1
