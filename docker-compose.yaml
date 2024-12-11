@@ -22,7 +22,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - MINI_EXCHANGE__POSTGRES_DB=mini_exchange
+      - MINI_EXCHANGE__POSTGRES_NAME=mini_exchange
       - MINI_EXCHANGE__POSTGRES_USER=mini_exchange
       - MINI_EXCHANGE__POSTGRES_PASSWORD=complex_password
       - MINI_EXCHANGE__POSTGRES_HOST=db
