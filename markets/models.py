@@ -22,7 +22,7 @@ class Coins(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.name}({self.symbol})"
+        return f"{self.name} ({self.symbol})"
 
 
 class Wallets(models.Model):
@@ -31,6 +31,7 @@ class Wallets(models.Model):
         on_delete=models.PROTECT,
         primary_key=True,
         editable=False,
+        related_name="wallet",
     )
 
     balance = models.FloatField(default=0)

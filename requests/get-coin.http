@@ -1,0 +1,27 @@
+
+### Authorization by token, part 1. Retrieve and save token.
+POST {{base_url}}/api/auth/
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+
+### GET request to example server
+GET {{base_url}}/api/coins/{{symbol}}
+Authorization: Token {{auth_token}}
+Content-Type: application/json
+
+
+### Buy a coin
+POST {{base_url}}/api/coins/{{symbol}}/
+Authorization: Token {{auth_token}}
+Content-Type: application/json
+
+{
+  "amount": 100
+}
