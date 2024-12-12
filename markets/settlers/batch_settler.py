@@ -50,7 +50,7 @@ class BatchCoinSettler(Settler):
                 )
                 return
 
-            external_id = self._exchange_stub.buy(total_amount, coin.symbol)
+            external_id = self._exchange_stub.buy(coin.symbol, total_amount)
 
             settlement = Settlements.objects.create(
                 coin=coin, amount=total_amount, external_id=external_id

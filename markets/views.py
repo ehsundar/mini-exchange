@@ -1,5 +1,3 @@
-from array import array
-
 from django.db import transaction
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
