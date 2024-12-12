@@ -4,7 +4,11 @@ from rest_framework.views import APIView
 
 from .exceptions import InsufficientFunds
 from .models import Coins, Transactions
-from .serializers import CoinSerializer
+from .serializers import (
+    CoinSerializer,
+    CreateTransactionRequestSerializer,
+    TransactionSerializer,
+)
 
 
 class CoinView(APIView):
@@ -15,20 +19,32 @@ class CoinView(APIView):
         serializer = CoinSerializer(coin)
         return Response(serializer.data)
 
+
+class TransactionsView(APIView):
+
     def post(self, request, symbol: str):
+        req_serializer = CreateTransactionRequestSerializer(data=request.data)
+        req_serializer.is_valid(raise_exception=True)
+        req_body = req_serializer.validated_data
+
         coin = get_object_or_404(Coins, symbol=symbol)
 
         user = request.user
         wallet = user.wallet
 
-        cost = coin.price * request.data["amount"]
+        cost = coin.price * req_body.get("amount")
         if cost > wallet.balance:
             raise InsufficientFunds
 
         trans = Transactions(
             user=request.user,
             coin=coin,
-            amount=request.data["amount"],
+            amount=req_body.get("amount"),
             price=coin.price,
         )
         trans.save()
+
+        wallet.balance -= cost
+        wallet.save()
+
+        return Response(TransactionSerializer(trans).data)

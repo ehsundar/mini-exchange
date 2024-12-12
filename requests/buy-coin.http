@@ -18,10 +18,10 @@ Content-Type: application/json
 
 
 ### Buy a coin
-POST {{base_url}}/api/coins/{{symbol}}/
+POST {{base_url}}/api/transactions/{{symbol}}/
 Authorization: Token {{auth_token}}
 Content-Type: application/json
 
 {
-  "amount": 100
+  "amount": 3
 }
