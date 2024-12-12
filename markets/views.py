@@ -1,9 +1,10 @@
+from django.db import transaction
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .exceptions import InsufficientFunds
-from .models import Coins, Transactions
+from .models import Coins, Transactions, Wallets
 from .serializers import (
     CoinSerializer,
     CreateTransactionRequestSerializer,
@@ -29,22 +30,22 @@ class TransactionsView(APIView):
 
         coin = get_object_or_404(Coins, symbol=symbol)
 
-        user = request.user
-        wallet = user.wallet
+        with transaction.atomic():
+            wallet = Wallets.objects.select_for_update().get(owner=request.user)
 
-        cost = coin.price * req_body.get("amount")
-        if cost > wallet.balance:
-            raise InsufficientFunds
+            cost = coin.price * req_body.get("amount")
+            if cost > wallet.balance:
+                raise InsufficientFunds
 
-        trans = Transactions(
-            user=request.user,
-            coin=coin,
-            amount=req_body.get("amount"),
-            price=coin.price,
-        )
-        trans.save()
+            trans = Transactions(
+                user=request.user,
+                coin=coin,
+                amount=req_body.get("amount"),
+                price=coin.price,
+            )
+            trans.save()
 
-        wallet.balance -= cost
-        wallet.save()
+            wallet.balance -= cost
+            wallet.save()
 
         return Response(TransactionSerializer(trans).data)
