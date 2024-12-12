@@ -17,11 +17,7 @@ class Coins(models.Model):
     )
 
     name = models.CharField(max_length=100)
-    price = models.FloatField(validators=[MinValueValidator(0)])
-
-    min_exchange_settlement = models.FloatField(
-        default=10, validators=[MinValueValidator(0)]
-    )
+    price = models.FloatField(validators=[MinValueValidator(0.0001)])
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

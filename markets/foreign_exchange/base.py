@@ -11,3 +11,12 @@ class ExchangeStub(ABC):
         :return: foreign exchange transaction ID.
         """
         pass
+
+    @abstractmethod
+    def min_buy_amount_dollars(self, currency_symbol: str) -> float:
+        """
+        Get the minimum amount of dollars required to buy a currency.
+        :param currency_symbol: BTC, ETH, etc.
+        :return: minimum amount of dollars.
+        """
+        pass
