@@ -129,3 +129,6 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CELERY_BROKER_URL = f"redis://{os.environ.get('MINI_EXCHANGE__REDIS_HOST')}:6379"
+CELERY_RESULT_BACKEND = f"redis://{os.environ.get('MINI_EXCHANGE__REDIS_HOST')}:6379"

@@ -1,3 +1,5 @@
+from array import array
+
 from django.db import transaction
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -10,6 +12,7 @@ from .serializers import (
     CreateTransactionRequestSerializer,
     TransactionSerializer,
 )
+from .tasks import settle_transactions
 
 
 class CoinView(APIView):
@@ -47,5 +50,7 @@ class TransactionsView(APIView):
 
             wallet.balance -= cost
             wallet.save()
+
+        settle_transactions.apply_async(args=[coin.symbol])
 
         return Response(TransactionSerializer(trans).data)
